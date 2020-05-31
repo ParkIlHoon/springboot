@@ -45,6 +45,23 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- JSP 파일 지원을 위한 의존성 추가 -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- JSTL 지원을 위한 의존성 추가 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <!-- 동적 파일 변경 시 자동 반영을 위한 의존성 추가 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
