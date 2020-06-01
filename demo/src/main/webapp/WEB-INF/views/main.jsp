@@ -7,7 +7,9 @@
     <title>Insert title here</title>
 </head>
 <body>
-    JSP 페이지입니다.
-    <%= request.getAttribute("testvalue")%>
+    JSP 페이지입니다. <br>
+    <%= request.getAttribute("testvalue")%> <br>
+
+    <%= request.getAttribute("user")%>
 </body>
 </html>
