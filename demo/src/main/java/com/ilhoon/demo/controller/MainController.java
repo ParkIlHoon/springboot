@@ -26,10 +26,10 @@ public class MainController
     {
         ModelAndView model = new ModelAndView("main");
 
-        List<User> userList = userService.findByUserId("1hoon");
+        User user = userService.findByUserId("1hoon");
 
         model.addObject("testvalue", "안녕!");
-        model.addObject("user", userList.get(0).toString());
+        model.addObject("user", user.toString());
 
         return model;
     }

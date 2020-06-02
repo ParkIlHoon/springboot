@@ -15,11 +15,34 @@ public class UserService
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> findByUserId (String userId)
+    public List<User> findAll ()
     {
-        List<User> userList = new ArrayList<>();
-        userList = userRepository.findByUserId(userId);
+        return userRepository.findAll();
+    }
 
-        return userList;
+    public User findByUserId (String userId)
+    {
+        return userRepository.findByUserId(userId);
+    }
+
+    public List<User> findByUserNm (String userNm)
+    {
+        return userRepository.findByUserNm(userNm);
+    }
+
+    public List<User> findByUserNmLike (String userNm)
+    {
+        return userRepository.findByUserNmLike(userNm);
+    }
+
+    public User save (User userVO)
+    {
+        userRepository.save(userVO);
+        return userVO;
+    }
+
+    public void deleteByUserId (User userVO)
+    {
+        userRepository.delete(userVO);
     }
 }
