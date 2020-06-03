@@ -31,6 +31,19 @@ public class UserController
     }
 
     /**
+     * 사용자 조회
+     * @param userNm 조회 대상 사용자 이름
+     * @return 사용자 목록
+     */
+    @GetMapping(params = "method=name", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<User>> getUserListByNm (@RequestParam(value = "userNm") String userNm)
+    {
+        List<User> userList = userService.findByUserNmLike(userNm);
+
+        return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
+    }
+
+    /**
      * 특정 사용자 조회
      * @param userId 조회 대상 사용자 아이디
      * @return 특정 사용자 정보
@@ -57,12 +70,26 @@ public class UserController
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-
+    /**
+     * 사용자 추가
+     * @param userVO
+     * @return
+     */
     @PostMapping
     public ResponseEntity<User> insertUser (User userVO)
     {
         User user = userService.save(userVO);
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    /**
+     * 사용자 삭제
+     * @param userId
+     */
+    @DeleteMapping(value="/{userId}")
+    public void deleteUser (@PathVariable("userId") String userId)
+    {
+        userService.deleteByUserId(userId);
     }
 }
