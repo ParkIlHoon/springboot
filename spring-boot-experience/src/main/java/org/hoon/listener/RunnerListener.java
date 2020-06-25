@@ -20,8 +20,8 @@ public class RunnerListener implements ApplicationRunner
 	@Autowired
 	IhoonProp prop;
 
-	@Autowired
-	private String hello;
+//	@Autowired
+//	private String hello;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception
@@ -30,6 +30,6 @@ public class RunnerListener implements ApplicationRunner
 		logger.debug("[RunnerListener] ilhoonProp.sessionTimeout : " + prop.getSessionTimeout());
 		logger.debug("[RunnerListener] foo : " + args.containsOption("foo"));
 		logger.debug("[RunnerListener] bar : " + args.containsOption("bar"));
-		logger.debug("[RunnerListener] hello : " + hello);
+//		logger.debug("[RunnerListener] hello : " + hello);
 	}
 }
