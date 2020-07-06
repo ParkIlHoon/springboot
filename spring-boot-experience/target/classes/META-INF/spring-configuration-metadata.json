@@ -1,0 +1,34 @@
+{
+  "groups": [
+    {
+      "name": "ilhoon-prop",
+      "type": "org.hoon.properties.IhoonProp",
+      "sourceType": "org.hoon.properties.IhoonProp"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ilhoon-prop.age",
+      "type": "java.lang.Integer",
+      "sourceType": "org.hoon.properties.IhoonProp",
+      "defaultValue": 0
+    },
+    {
+      "name": "ilhoon-prop.full-name",
+      "type": "java.lang.String",
+      "sourceType": "org.hoon.properties.IhoonProp"
+    },
+    {
+      "name": "ilhoon-prop.name",
+      "type": "java.lang.String",
+      "sourceType": "org.hoon.properties.IhoonProp"
+    },
+    {
+      "name": "ilhoon-prop.session-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "org.hoon.properties.IhoonProp",
+      "defaultValue": "30s"
+    }
+  ],
+  "hints": []
+}

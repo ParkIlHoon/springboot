@@ -1,0 +1,5 @@
+org\hoon\HolomanConfiguration.class
+META-INF\spring-autoconfigure-metadata.properties
+META-INF\spring-configuration-metadata.json
+org\hoon\HolomanProperties.class
+org\hoon\Holoman.class
