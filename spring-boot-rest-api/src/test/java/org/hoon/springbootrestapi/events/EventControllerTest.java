@@ -1,11 +1,14 @@
 package org.hoon.springbootrestapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,7 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+//@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 public class EventControllerTest
 {
 	@Autowired
@@ -29,8 +34,8 @@ public class EventControllerTest
 	@Autowired
 	ObjectMapper mapper;
 
-	@MockBean
-	EventRepository repository;
+//	@MockBean
+//	EventRepository repository;
 
 	@Test
 	public void createEvent() throws Exception
@@ -46,9 +51,12 @@ public class EventControllerTest
 								.maxPrice(200)
 								.limitOfEnrollment(100)
 								.location("어딘지 몰라요")
+								.id(100)
+								.free(true)
+								.eventStatus(EventStatus.PUBLISHED)
 							.build();
-		event.setId(10);
-		Mockito.when(repository.save(event)).thenReturn(event);
+		//event.setId(10);
+		//Mockito.when(repository.save(event)).thenReturn(event);
 
 		mockMvc.perform(post("/api/events/")
 					.contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +66,10 @@ public class EventControllerTest
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("id").exists())
 				.andExpect(header().exists(HttpHeaders.LOCATION))
-				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE));
+				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+				.andExpect(jsonPath("id").value(Matchers.not(100)))
+				.andExpect(jsonPath("free").value(Matchers.not(true)))
+				.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.toString()));
 	}
 
 }

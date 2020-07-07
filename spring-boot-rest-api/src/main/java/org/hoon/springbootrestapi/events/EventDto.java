@@ -2,24 +2,14 @@ package org.hoon.springbootrestapi.events;
 
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = {"id"})
-@Entity
-public class Event
+@AllArgsConstructor
+@Data
+public class EventDto
 {
-	/**
-	 * 이벤트 아이디
-	 */
-	@Id
-	@GeneratedValue
-	private Integer id;
 	/**
 	 * 이벤트 이름
 	 */
@@ -61,17 +51,4 @@ public class Event
 	 * 등록 상한수
 	 */
 	private int limitOfEnrollment;
-	/**
-	 * 오프라인 모임 여부
-	 */
-	private boolean offline;
-	/**
-	 * 무료 모임 여부
-	 */
-	private boolean free;
-	/**
-	 * 이벤트 상태
-	 */
-	@Enumerated(EnumType.STRING)
-	private EventStatus eventStatus = EventStatus.DRAFT;
 }
