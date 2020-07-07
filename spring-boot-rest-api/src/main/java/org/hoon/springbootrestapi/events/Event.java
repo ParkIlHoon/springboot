@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = {"id"})
 public class Event
 {
+	/**
+	 * 이벤트 아이디
+	 */
 	private Integer id;
 	/**
 	 * 이벤트 이름
