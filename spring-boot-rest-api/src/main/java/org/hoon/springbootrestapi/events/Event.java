@@ -2,6 +2,7 @@ package org.hoon.springbootrestapi.events;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Builder
@@ -10,11 +11,14 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
+@Entity
 public class Event
 {
 	/**
 	 * 이벤트 아이디
 	 */
+	@Id
+	@GeneratedValue
 	private Integer id;
 	/**
 	 * 이벤트 이름
@@ -68,5 +72,6 @@ public class Event
 	/**
 	 * 이벤트 상태
 	 */
+	@Enumerated(EnumType.STRING)
 	private EventStatus eventStatus;
 }
