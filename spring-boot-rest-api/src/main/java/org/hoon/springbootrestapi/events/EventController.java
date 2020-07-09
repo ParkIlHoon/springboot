@@ -33,14 +33,14 @@ public class EventController
 	{
 		if (errors.hasErrors())
 		{
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(errors);
 		}
 
 		validator.validate(eventDto, errors);
 
 		if (errors.hasErrors())
 		{
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(errors);
 		}
 
 		Event mapped = mapper.map(eventDto, Event.class);

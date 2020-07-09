@@ -119,13 +119,27 @@ public class EventControllerTest
 	public void createEvent_badRequest_wrong_input() throws Exception
 	{
 		EventDto eventDto = EventDto.builder()
-										.basePrice(200)
+										.name("Spring")
+										.description("테스트")
+										.beginEnrollmentDateTime(LocalDateTime.of(2020,7,7,19,30))
+										.closeEnrollmentDateTime(LocalDateTime.of(2020,7,8,19,30))
+										.beginEventDateTime(LocalDateTime.of(2020,8,6,19,30))
+										.endEventDateTime(LocalDateTime.of(2020,8,7,19,30))
+										.basePrice(1000)
 										.maxPrice(100)
+										.limitOfEnrollment(100)
+										.location("어딘지 몰라요")
 									.build();
 
 		mockMvc.perform(post("/api/events/")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(eventDto)))
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andDo(print())
+				.andExpect(jsonPath("$[0].objectName").exists())
+//				.andExpect(jsonPath("$[0].field").exists())
+				.andExpect(jsonPath("$[0].defaultMessage").exists())
+//				.andExpect(jsonPath("$[0].rejectedValue").exists())
+				.andExpect(jsonPath("$[0].code").exists());
 	}
 }
