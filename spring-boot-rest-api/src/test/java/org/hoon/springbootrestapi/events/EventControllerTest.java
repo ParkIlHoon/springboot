@@ -2,6 +2,7 @@ package org.hoon.springbootrestapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.hoon.springbootrestapi.common.TestDescription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -38,6 +39,7 @@ public class EventControllerTest
 //	EventRepository repository;
 
 	@Test
+	@TestDescription("정상적으로 이벤트를 생성하는 테스트")
 	public void createEvent() throws Exception
 	{
 		Event event = Event.builder()
@@ -51,9 +53,9 @@ public class EventControllerTest
 								.maxPrice(200)
 								.limitOfEnrollment(100)
 								.location("어딘지 몰라요")
-								.id(100)
+//								.id(100)
 								.free(true)
-								.eventStatus(EventStatus.PUBLISHED)
+//								.eventStatus(EventStatus.PUBLISHED)
 							.build();
 		//event.setId(10);
 		//Mockito.when(repository.save(event)).thenReturn(event);
@@ -73,6 +75,7 @@ public class EventControllerTest
 	}
 
 	@Test
+	@TestDescription("입력 받을 수 없는 값이 입력됬을 때 BadRequest 응답 테스트")
 	public void createEvent_badRequest() throws Exception
 	{
 		Event event = Event.builder()
@@ -100,6 +103,7 @@ public class EventControllerTest
 	}
 
 	@Test
+	@TestDescription("입력 값이 비어있을 때 BadRequest 응답 테스트")
 	public void createEvent_badRequest_empty_input() throws Exception
 	{
 		EventDto eventDto = EventDto.builder().build();
@@ -111,6 +115,7 @@ public class EventControllerTest
 	}
 
 	@Test
+	@TestDescription("입력 값이 잘못됬을 때 BadRequest 응답 테스트")
 	public void createEvent_badRequest_wrong_input() throws Exception
 	{
 		EventDto eventDto = EventDto.builder()
