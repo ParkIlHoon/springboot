@@ -1,6 +1,7 @@
 package org.hoon.springbootrestapi.events;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
 import org.springframework.validation.Errors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class EventController
 		eventResource.add(linkTo(EventController.class).withRel("query-events"));
 		//eventResource.add(selfBuilder.withSelfRel());
 		eventResource.add(selfBuilder.withRel("update-event"));
+		eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
 
 		return ResponseEntity.created(createUri).body(eventResource);
 	}
