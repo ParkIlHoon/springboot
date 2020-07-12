@@ -143,29 +143,4 @@ public class EventControllerTest
 //				.andExpect(jsonPath("$[0].rejectedValue").exists())
 				.andExpect(jsonPath("$[0].code").exists());
 	}
-
-	@Test
-	public void freeTest()
-	{
-		Event event = Event.builder()
-								.basePrice(0)
-								.maxPrice(0)
-							.build();
-
-		event.update();
-
-		assertThat(event.isFree()).isTrue();
-	}
-
-	@Test
-	public void offlineTest()
-	{
-		Event event = Event.builder()
-								.location("테스트")
-							.build();
-
-		event.update();
-
-		assertThat(event.isOffline()).isTrue();
-	}
 }
