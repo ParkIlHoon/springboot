@@ -43,7 +43,7 @@ public class EventControllerTest
 	@TestDescription("정상적으로 이벤트를 생성하는 테스트")
 	public void createEvent() throws Exception
 	{
-		Event event = Event.builder()
+		EventDto event = EventDto.builder()
 								.name("Spring")
 								.description("테스트")
 								.beginEnrollmentDateTime(LocalDateTime.of(2020,7,7,19,30))
@@ -55,7 +55,7 @@ public class EventControllerTest
 								.limitOfEnrollment(100)
 								.location("어딘지 몰라요")
 //								.id(100)
-								.free(true)
+//								.free(true)
 //								.eventStatus(EventStatus.PUBLISHED)
 							.build();
 		//event.setId(10);
@@ -72,7 +72,10 @@ public class EventControllerTest
 				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
 				.andExpect(jsonPath("id").value(Matchers.not(100)))
 				.andExpect(jsonPath("free").value(Matchers.not(true)))
-				.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.toString()));
+				.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.toString()))
+				.andExpect(jsonPath("_links.self").exists())
+				.andExpect(jsonPath("_links.query-events").exists())
+				.andExpect(jsonPath("_links.update-event").exists());
 	}
 
 	@Test

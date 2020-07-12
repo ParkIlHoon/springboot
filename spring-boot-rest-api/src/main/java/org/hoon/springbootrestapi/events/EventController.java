@@ -1,6 +1,7 @@
 package org.hoon.springbootrestapi.events;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
 import org.springframework.validation.Errors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -47,9 +48,16 @@ public class EventController
 
 		Event newEvent = repository.save(mapped);
 
-		URI createUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
+		// HATEOAS 처리
+		ControllerLinkBuilder selfBuilder = linkTo(EventController.class).slash(newEvent.getId());
+		URI createUri = selfBuilder.toUri();
 
-		return ResponseEntity.created(createUri).body(newEvent);
+		EventResource eventResource = new EventResource(newEvent);
+		eventResource.add(linkTo(EventController.class).withRel("query-events"));
+		//eventResource.add(selfBuilder.withSelfRel());
+		eventResource.add(selfBuilder.withRel("update-event"));
+
+		return ResponseEntity.created(createUri).body(eventResource);
 	}
 
 }
