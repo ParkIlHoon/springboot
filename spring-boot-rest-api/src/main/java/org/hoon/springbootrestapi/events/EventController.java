@@ -1,5 +1,6 @@
 package org.hoon.springbootrestapi.events;
 
+import org.hoon.springbootrestapi.common.ErrorResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
@@ -35,14 +36,14 @@ public class EventController
 	{
 		if (errors.hasErrors())
 		{
-			return ResponseEntity.badRequest().body(errors);
+			return ResponseEntity.badRequest().body(new ErrorResource(errors));
 		}
 
 		validator.validate(eventDto, errors);
 
 		if (errors.hasErrors())
 		{
-			return ResponseEntity.badRequest().body(errors);
+			return ResponseEntity.badRequest().body(new ErrorResource(errors));
 		}
 
 		Event mapped = mapper.map(eventDto, Event.class);
