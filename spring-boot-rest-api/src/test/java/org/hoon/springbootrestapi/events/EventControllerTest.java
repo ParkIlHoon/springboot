@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -28,6 +29,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,6 +49,9 @@ public class EventControllerTest
 
 //	@MockBean
 //	EventRepository repository;
+
+	@Autowired
+	EventRepository eventRepository;
 
 	@Test
 	@TestDescription("정상적으로 이벤트를 생성하는 테스트")
@@ -205,5 +210,35 @@ public class EventControllerTest
 //				.andExpect(jsonPath("$[0].rejectedValue").exists())
 //				.andExpect(jsonPath("$[0].code").exists())
 				.andExpect(jsonPath("_links.index").exists());
+	}
+
+	@Test
+	@TestDescription("30의 이벤트를 10개씩 두번째 페이지 조회하기")
+	public void queryEvents() throws Exception
+	{
+		IntStream.range(0, 30).forEach(i -> {
+			this.generateEvent(i);
+		});
+
+		this.mockMvc.perform(get("/api/events/")
+					.param("page","1")
+					.param("size", "10")
+					.param("sort","name,DESC"))
+				.andDo(print())
+				.andDo(document("query-events"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("_links.profile").exists())
+				.andExpect(jsonPath("page").exists())
+				.andExpect(jsonPath("_embedded.eventResourceList[0]._links.self").exists());
+	}
+
+	private void generateEvent(int idx)
+	{
+		Event event = Event.builder()
+								.name("event " + idx)
+								.description(idx + "번째 이벤트")
+							.build();
+
+		this.eventRepository.save(event);
 	}
 }
