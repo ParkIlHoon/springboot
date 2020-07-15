@@ -1,55 +1,27 @@
 package org.hoon.springbootrestapi.events;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.hoon.springbootrestapi.common.RestDocConfig;
+import org.hoon.springbootrestapi.common.BaseControllerTest;
 import org.hoon.springbootrestapi.common.TestDescription;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-//@WebMvcTest
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocConfig.class)
-public class EventControllerTest
+public class EventControllerTest extends BaseControllerTest
 {
-	@Autowired
-	MockMvc mockMvc;
-
-	@Autowired
-	ObjectMapper mapper;
-
-//	@MockBean
-//	EventRepository repository;
-
 	@Autowired
 	EventRepository eventRepository;
 
@@ -232,13 +204,121 @@ public class EventControllerTest
 				.andExpect(jsonPath("_embedded.eventResourceList[0]._links.self").exists());
 	}
 
-	private void generateEvent(int idx)
+	private Event generateEvent(int idx)
 	{
 		Event event = Event.builder()
-								.name("event " + idx)
-								.description(idx + "번째 이벤트")
-							.build();
+					.id(idx)
+					.name("Spring")
+					.description("테스트")
+					.beginEnrollmentDateTime(LocalDateTime.of(2020,7,7,19,30))
+					.closeEnrollmentDateTime(LocalDateTime.of(2020,7,8,19,30))
+					.beginEventDateTime(LocalDateTime.of(2020,8,6,19,30))
+					.endEventDateTime(LocalDateTime.of(2020,8,7,19,30))
+					.basePrice(100)
+					.maxPrice(200)
+					.limitOfEnrollment(100)
+					.location("어딘지 몰라요")
+					.free(false)
+					.offline(true)
+					.eventStatus(EventStatus.DRAFT)
+				.build();
+		return this.eventRepository.save(event);
+	}
 
-		this.eventRepository.save(event);
+	@Test
+	@TestDescription("이벤트 한 건을 조회하기")
+	public void getEvent() throws Exception
+	{
+		Event event = this.generateEvent(1);
+
+		this.mockMvc.perform(get("/api/events/{id}", event.getId()))
+				.andDo(print())
+				.andDo(document("get-event"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("name").exists())
+				.andExpect(jsonPath("id").exists())
+				.andExpect(jsonPath("description").exists())
+				.andExpect(jsonPath("_links.self").exists())
+				.andExpect(jsonPath("_links.profile").exists());
+
+	}
+
+	@Test
+	@TestDescription("존재하지 않는 이벤트를 조회하기")
+	public void getEmptyEvent() throws Exception
+	{
+		this.mockMvc.perform(get("/api/events/{id}", 1234))
+				.andDo(print())
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@TestDescription("이벤트 정보를 수정하기")
+	public void updateEvent() throws Exception
+	{
+		Event event = this.generateEvent(1);
+		String changeName = "수정한 이벤트";
+
+		EventDto eventDto = this.modelMapper.map(event, EventDto.class);
+
+		eventDto.setName(changeName);
+
+		this.mockMvc.perform(put("/api/events/{id}", event.getId())
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(this.mapper.writeValueAsString(eventDto)))
+				.andDo(print())
+				.andDo(document("update-event"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("name").value(changeName))
+				.andExpect(jsonPath("_links.self").exists())
+				.andExpect(jsonPath("_links.profile").exists());
+	}
+
+	@Test
+	@TestDescription("입력값이 비어있는 경우에 이벤트 수정 실패")
+	public void updateEvent_empty() throws Exception
+	{
+		Event event = this.generateEvent(300);
+
+		EventDto eventDto = new EventDto();
+
+		this.mockMvc.perform(put("/api/events/{id}", event.getId())
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(this.mapper.writeValueAsString(eventDto)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@TestDescription("입력값이 잘못되있는 경우에 이벤트 수정 실패")
+	public void updateEvent_wrong() throws Exception
+	{
+		Event event = this.generateEvent(200);
+
+		EventDto eventDto = this.modelMapper.map(event, EventDto.class);
+
+		eventDto.setBasePrice(1000);
+		eventDto.setMaxPrice(100);
+
+		this.mockMvc.perform(put("/api/events/{id}", event.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(this.mapper.writeValueAsString(eventDto)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@TestDescription("존재하지 않는 이벤트 수정 실패")
+	public void updateEvent_notExist() throws Exception
+	{
+		Event event = this.generateEvent(200);
+
+		EventDto eventDto = this.modelMapper.map(event, EventDto.class);
+
+		this.mockMvc.perform(put("/api/events/{id}", 12345)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(this.mapper.writeValueAsString(eventDto)))
+				.andDo(print())
+				.andExpect(status().isNotFound());
 	}
 }

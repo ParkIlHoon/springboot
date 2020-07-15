@@ -14,13 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.ControllerLinkBuilder.linkTo;
 
@@ -36,6 +34,9 @@ public class EventController
 
 	@Autowired
 	EventValidator validator;
+
+	@Autowired
+	ModelMapper modelMapper;
 
 	@PostMapping
 	public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors)
@@ -85,6 +86,62 @@ public class EventController
 		pageResource.add(new Link("/docs/index.html#query-events").withRel("profile"));
 
 		return ResponseEntity.ok(pageResource);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity getEvent(@PathVariable Integer id)
+	{
+		Optional<Event> optionalEvent = this.repository.findById(id);
+
+		if (optionalEvent.isEmpty())
+		{
+			return ResponseEntity.notFound().build();
+		}
+		else
+		{
+			Event event = optionalEvent.get();
+			EventResource eventResource = new EventResource(event);
+
+			eventResource.add(new Link("/docs/index.html#get-event").withRel("profile"));
+
+			return ResponseEntity.ok(eventResource);
+		}
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity updateEvent(@PathVariable Integer id, @RequestBody @Valid EventDto eventDto, Errors errors)
+	{
+		if (errors.hasErrors())
+		{
+			return ResponseEntity.badRequest().body(new ErrorResource(errors));
+		}
+
+		Optional<Event> optionalEvent = this.repository.findById(id);
+
+		if (optionalEvent.isEmpty())
+		{
+			return ResponseEntity.notFound().build();
+		}
+		else
+		{
+			validator.validate(eventDto, errors);
+
+			if (errors.hasErrors())
+			{
+				return ResponseEntity.badRequest().body(new ErrorResource(errors));
+			}
+
+			Event event = optionalEvent.get();
+
+			this.modelMapper.map(eventDto, event);
+
+			Event savedEvent = this.repository.save(event);
+
+			EventResource eventResource = new EventResource(savedEvent);
+			eventResource.add(new Link("/docs/index.html#update-event").withRel("profile"));
+
+			return ResponseEntity.ok(eventResource);
+		}
 	}
 
 }
