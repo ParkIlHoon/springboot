@@ -1,6 +1,7 @@
 package org.hoon.springbootrestapi.events;
 
 import lombok.*;
+import org.hoon.springbootrestapi.account.Account;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -74,6 +75,9 @@ public class Event
 	 */
 	@Enumerated(EnumType.STRING)
 	private EventStatus eventStatus = EventStatus.DRAFT;
+
+	@ManyToOne
+	private Account manager;
 
 	public void update()
 	{
