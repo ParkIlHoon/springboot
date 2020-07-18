@@ -5,6 +5,7 @@ import org.hoon.springbootrestapi.account.Account;
 import org.hoon.springbootrestapi.account.AccountRepository;
 import org.hoon.springbootrestapi.account.AccountRole;
 import org.hoon.springbootrestapi.account.AccountService;
+import org.hoon.springbootrestapi.common.AppProperties;
 import org.hoon.springbootrestapi.common.BaseControllerTest;
 import org.hoon.springbootrestapi.common.TestDescription;
 import org.junit.Before;
@@ -40,6 +41,9 @@ public class EventControllerTest extends BaseControllerTest
 
 	@Autowired
 	AccountRepository accountRepository;
+
+	@Autowired
+	AppProperties appProperties;
 
 	@Before
 	public void setUp()
@@ -142,8 +146,8 @@ public class EventControllerTest extends BaseControllerTest
 	private String getAccessToken() throws Exception
 	{
 		// 테스트 계정 생성
-		String username = "2hoon";
-		String password = "1234";
+		String username = this.appProperties.getUserUserName();
+		String password = this.appProperties.getUserPassword();
 		Account account = Account.builder()
 				.email(username)
 				.password(password)
@@ -151,8 +155,8 @@ public class EventControllerTest extends BaseControllerTest
 				.build();
 		this.accountService.saveAccount(account);
 
-		String clientId = "myApp";
-		String clientSecret = "pass";
+		String clientId = this.appProperties.getClientId();
+		String clientSecret = this.appProperties.getClientSecret();
 
 		ResultActions perform = this.mockMvc.perform(post("/oauth/token")
 													.with(httpBasic(clientId, clientSecret))
