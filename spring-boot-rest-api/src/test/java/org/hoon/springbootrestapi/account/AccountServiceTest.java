@@ -38,7 +38,7 @@ public class AccountServiceTest
 	@Test
 	public void findByUsername()
 	{
-		String userName = "1hoon";
+		String userName = "testUser";
 		String password = "1234";
 
 		Account account = Account.builder()
@@ -59,7 +59,7 @@ public class AccountServiceTest
 	@Test
 	public void fingByUsername_fail()
 	{
-		String userName = "1hoon";
+		String userName = "testUser1234";
 
 		expectedException.expect(UsernameNotFoundException.class);
 		expectedException.expectMessage(Matchers.containsString(userName));

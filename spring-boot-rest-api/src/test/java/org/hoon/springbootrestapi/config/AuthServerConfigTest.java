@@ -1,11 +1,13 @@
 package org.hoon.springbootrestapi.config;
 
 import org.hoon.springbootrestapi.account.Account;
+import org.hoon.springbootrestapi.account.AccountRepository;
 import org.hoon.springbootrestapi.account.AccountRole;
 import org.hoon.springbootrestapi.account.AccountService;
 import org.hoon.springbootrestapi.common.AppProperties;
 import org.hoon.springbootrestapi.common.BaseControllerTest;
 import org.hoon.springbootrestapi.common.TestDescription;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +26,15 @@ public class AuthServerConfigTest extends BaseControllerTest
 
 	@Autowired
 	AppProperties appProperties;
+
+	@Autowired
+	AccountRepository accountRepository;
+
+	@Before
+	public void setUp()
+	{
+		this.accountRepository.deleteAll();
+	}
 
 	@Test
 	@TestDescription("인증 토큰을 발급 받는 테스트")

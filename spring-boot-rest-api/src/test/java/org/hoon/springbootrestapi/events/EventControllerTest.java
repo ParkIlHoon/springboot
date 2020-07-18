@@ -136,7 +136,7 @@ public class EventControllerTest extends BaseControllerTest
 								fieldWithPath("free").description("free of new Event"),
 								fieldWithPath("offline").description("offline of new Event"),
 								fieldWithPath("eventStatus").description("status of new Event"),
-								fieldWithPath("manager.id").description("manager's Id of new Event"),
+								fieldWithPath("manager.id").description("manager of new Event"),
 								fieldWithPath("_links.self.href").description("self link of new Event"),
 								fieldWithPath("_links.query-events.href").description("query-event link of new Event"),
 								fieldWithPath("_links.update-event.href").description("update-event link of new Event"),
@@ -147,23 +147,15 @@ public class EventControllerTest extends BaseControllerTest
 
 	private String getAccessToken() throws Exception
 	{
-		// 테스트 계정 생성
-		String username = this.appProperties.getUserUserName();
-		String password = this.appProperties.getUserPassword();
-		Account account = Account.builder()
-				.email(username)
-				.password(password)
-				.roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-				.build();
-		this.accountService.saveAccount(account);
+		createAccount();
 
 		String clientId = this.appProperties.getClientId();
 		String clientSecret = this.appProperties.getClientSecret();
 
 		ResultActions perform = this.mockMvc.perform(post("/oauth/token")
 													.with(httpBasic(clientId, clientSecret))
-													.param("username", username)
-													.param("password", password)
+													.param("username", this.appProperties.getUserUserName())
+													.param("password", this.appProperties.getUserPassword())
 													.param("grant_type", "password"));
 
 		MockHttpServletResponse response = perform.andReturn().getResponse();
@@ -171,6 +163,46 @@ public class EventControllerTest extends BaseControllerTest
 
 		Jackson2JsonParser parser = new Jackson2JsonParser();
 		return parser.parseMap(responseContent).get("access_token").toString();
+	}
+
+	private String getAccessToken(boolean isNeedToCreateAccount) throws Exception
+	{
+		String userName = this.appProperties.getUserUserName();
+		String password = this.appProperties.getUserPassword();
+
+		if (isNeedToCreateAccount)
+		{
+			Account user = createAccount();
+			userName = user.getEmail();
+			password = user.getPassword();
+		}
+
+		String clientId = this.appProperties.getClientId();
+		String clientSecret = this.appProperties.getClientSecret();
+
+		ResultActions perform = this.mockMvc.perform(post("/oauth/token")
+				.with(httpBasic(clientId, clientSecret))
+				.param("username", userName)
+				.param("password", password)
+				.param("grant_type", "password"));
+
+		MockHttpServletResponse response = perform.andReturn().getResponse();
+		String responseContent = response.getContentAsString();
+
+		Jackson2JsonParser parser = new Jackson2JsonParser();
+		return parser.parseMap(responseContent).get("access_token").toString();
+	}
+
+	private Account createAccount()
+	{
+		String username = this.appProperties.getUserUserName();
+		String password = this.appProperties.getUserPassword();
+		Account account = Account.builder()
+				.email(username)
+				.password(password)
+				.roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+				.build();
+		return this.accountService.saveAccount(account);
 	}
 
 	@Test
@@ -290,30 +322,45 @@ public class EventControllerTest extends BaseControllerTest
 
 	private Event generateEvent(int idx)
 	{
-		Event event = Event.builder()
-					.id(idx)
-					.name("Spring")
-					.description("테스트")
-					.beginEnrollmentDateTime(LocalDateTime.of(2020,7,7,19,30))
-					.closeEnrollmentDateTime(LocalDateTime.of(2020,7,8,19,30))
-					.beginEventDateTime(LocalDateTime.of(2020,8,6,19,30))
-					.endEventDateTime(LocalDateTime.of(2020,8,7,19,30))
-					.basePrice(100)
-					.maxPrice(200)
-					.limitOfEnrollment(100)
-					.location("어딘지 몰라요")
-					.free(false)
-					.offline(true)
-					.eventStatus(EventStatus.DRAFT)
-				.build();
+		Event event = buildEvent();
+		event.setId(idx);
 		return this.eventRepository.save(event);
+	}
+
+	private Event generateEvent(int idx, Account manager)
+	{
+		Event event = buildEvent();
+		event.setId(idx);
+		event.setManager(manager);
+		return this.eventRepository.save(event);
+	}
+
+	private Event buildEvent()
+	{
+		Event event = Event.builder()
+				.name("Spring")
+				.description("테스트")
+				.beginEnrollmentDateTime(LocalDateTime.of(2020,7,7,19,30))
+				.closeEnrollmentDateTime(LocalDateTime.of(2020,7,8,19,30))
+				.beginEventDateTime(LocalDateTime.of(2020,8,6,19,30))
+				.endEventDateTime(LocalDateTime.of(2020,8,7,19,30))
+				.basePrice(100)
+				.maxPrice(200)
+				.limitOfEnrollment(100)
+				.location("어딘지 몰라요")
+				.free(false)
+				.offline(true)
+				.eventStatus(EventStatus.DRAFT)
+				.build();
+		return event;
 	}
 
 	@Test
 	@TestDescription("이벤트 한 건을 조회하기")
 	public void getEvent() throws Exception
 	{
-		Event event = this.generateEvent(1);
+		Account account = createAccount();
+		Event event = this.generateEvent(100, account);
 
 		this.mockMvc.perform(get("/api/events/{id}", event.getId()))
 				.andDo(print())
@@ -340,15 +387,15 @@ public class EventControllerTest extends BaseControllerTest
 	@TestDescription("이벤트 정보를 수정하기")
 	public void updateEvent() throws Exception
 	{
-		Event event = this.generateEvent(1);
+		Account account = createAccount();
+		Event event = generateEvent(400, account);
 		String changeName = "수정한 이벤트";
 
 		EventDto eventDto = this.modelMapper.map(event, EventDto.class);
-
 		eventDto.setName(changeName);
 
 		this.mockMvc.perform(put("/api/events/{id}", event.getId())
-								.header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+								.header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken(false))
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(this.mapper.writeValueAsString(eventDto)))
 				.andDo(print())
