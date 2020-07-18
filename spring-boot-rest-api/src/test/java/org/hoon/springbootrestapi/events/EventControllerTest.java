@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -134,7 +136,7 @@ public class EventControllerTest extends BaseControllerTest
 								fieldWithPath("free").description("free of new Event"),
 								fieldWithPath("offline").description("offline of new Event"),
 								fieldWithPath("eventStatus").description("status of new Event"),
-								fieldWithPath("manager").description("manager of new Event"),
+								fieldWithPath("manager.id").description("manager's Id of new Event"),
 								fieldWithPath("_links.self.href").description("self link of new Event"),
 								fieldWithPath("_links.query-events.href").description("query-event link of new Event"),
 								fieldWithPath("_links.update-event.href").description("update-event link of new Event"),
@@ -260,6 +262,28 @@ public class EventControllerTest extends BaseControllerTest
 				.andDo(document("query-events"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("_links.profile").exists())
+				.andExpect(jsonPath("page").exists())
+				.andExpect(jsonPath("_embedded.eventResourceList[0]._links.self").exists());
+	}
+
+	@Test
+	@TestDescription("30의 이벤트를 10개씩 두번째 페이지 조회하기")
+	public void queryEventsWithAuthentication() throws Exception
+	{
+		IntStream.range(0, 30).forEach(i -> {
+			this.generateEvent(i);
+		});
+
+		this.mockMvc.perform(get("/api/events/")
+				.header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+				.param("page","1")
+				.param("size", "10")
+				.param("sort","name,DESC"))
+				.andDo(print())
+				.andDo(document("query-events"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("_links.profile").exists())
+				.andExpect(jsonPath("_links.create-event").exists())
 				.andExpect(jsonPath("page").exists())
 				.andExpect(jsonPath("_embedded.eventResourceList[0]._links.self").exists());
 	}

@@ -42,7 +42,8 @@ public class AccountService implements UserDetailsService
 		else
 		{
 			Account account = byEmail.get();
-			return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
+			//return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
+			return new AccountAdapter(account);
 		}
 	}
 

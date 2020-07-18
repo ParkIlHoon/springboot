@@ -1,7 +1,9 @@
 package org.hoon.springbootrestapi.events;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import org.hoon.springbootrestapi.account.Account;
+import org.hoon.springbootrestapi.account.AccountSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -77,6 +79,7 @@ public class Event
 	private EventStatus eventStatus = EventStatus.DRAFT;
 
 	@ManyToOne
+	@JsonSerialize(using = AccountSerializer.class)
 	private Account manager;
 
 	public void update()

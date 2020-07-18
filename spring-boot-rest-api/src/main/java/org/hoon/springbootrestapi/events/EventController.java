@@ -1,5 +1,8 @@
 package org.hoon.springbootrestapi.events;
 
+import org.hoon.springbootrestapi.account.Account;
+import org.hoon.springbootrestapi.account.AccountAdapter;
+import org.hoon.springbootrestapi.common.CurrentUser;
 import org.hoon.springbootrestapi.common.ErrorResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -9,6 +12,11 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.Errors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -39,7 +47,7 @@ public class EventController
 	ModelMapper modelMapper;
 
 	@PostMapping
-	public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors)
+	public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors, @CurrentUser Account account)
 	{
 		if (errors.hasErrors())
 		{
@@ -54,7 +62,8 @@ public class EventController
 		}
 
 		Event mapped = mapper.map(eventDto, Event.class);
-
+		mapped.update();
+		mapped.setManager(account);
 		Event newEvent = repository.save(mapped);
 
 		// HATEOAS 처리
@@ -71,7 +80,7 @@ public class EventController
 	}
 
 	@GetMapping
-	public ResponseEntity queryEvents(Pageable pageable, PagedResourcesAssembler<Event> assembler)
+	public ResponseEntity queryEvents(Pageable pageable, PagedResourcesAssembler<Event> assembler, @CurrentUser Account account)
 	{
 		Page<Event> page = this.repository.findAll(pageable);
 		//페이지 링크도 받으려면
@@ -85,11 +94,16 @@ public class EventController
 		});
 		pageResource.add(new Link("/docs/index.html#query-events").withRel("profile"));
 
+		if (account != null)
+		{
+			pageResource.add(linkTo(EventController.class).withRel("create-event"));
+		}
+
 		return ResponseEntity.ok(pageResource);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity getEvent(@PathVariable Integer id)
+	public ResponseEntity getEvent(@PathVariable Integer id, @CurrentUser Account account)
 	{
 		Optional<Event> optionalEvent = this.repository.findById(id);
 
@@ -97,19 +111,21 @@ public class EventController
 		{
 			return ResponseEntity.notFound().build();
 		}
-		else
+
+		Event event = optionalEvent.get();
+		EventResource eventResource = new EventResource(event);
+		eventResource.add(new Link("/docs/index.html#get-event").withRel("profile"));
+
+		if (event.getManager().equals(account))
 		{
-			Event event = optionalEvent.get();
-			EventResource eventResource = new EventResource(event);
-
-			eventResource.add(new Link("/docs/index.html#get-event").withRel("profile"));
-
-			return ResponseEntity.ok(eventResource);
+			eventResource.add(linkTo(EventController.class).slash(event.getId()).withRel("update-event"));
 		}
+
+		return ResponseEntity.ok(eventResource);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity updateEvent(@PathVariable Integer id, @RequestBody @Valid EventDto eventDto, Errors errors)
+	public ResponseEntity updateEvent(@PathVariable Integer id, @RequestBody @Valid EventDto eventDto, Errors errors, @CurrentUser Account account)
 	{
 		if (errors.hasErrors())
 		{
@@ -132,6 +148,12 @@ public class EventController
 			}
 
 			Event event = optionalEvent.get();
+
+			// 업데이트 할 이벤트의 Manager가 현재 로그인한 사용자가 아닌 경우
+			if(!event.getManager().equals(account))
+			{
+				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+			}
 
 			this.modelMapper.map(eventDto, event);
 
