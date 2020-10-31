@@ -16,39 +16,32 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class AccountService implements UserDetailsService
-{
-	@Autowired
-	AccountRepository accountRepository;
+public class AccountService implements UserDetailsService {
+    @Autowired
+    AccountRepository accountRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-	public Account saveAccount (Account account)
-	{
-		account.setPassword(this.passwordEncoder.encode(account.getPassword()));
-		return this.accountRepository.save(account);
-	}
+    public Account saveAccount(Account account) {
+        account.setPassword(this.passwordEncoder.encode(account.getPassword()));
+        return this.accountRepository.save(account);
+    }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
-	{
-		Optional<Account> byEmail = accountRepository.findByEmail(username);
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Account> byEmail = accountRepository.findByEmail(username);
 
-		if (byEmail.isEmpty())
-		{
-			throw new UsernameNotFoundException(username);
-		}
-		else
-		{
-			Account account = byEmail.get();
-			//return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
-			return new AccountAdapter(account);
-		}
-	}
+        if (byEmail.isEmpty()) {
+            throw new UsernameNotFoundException(username);
+        } else {
+            Account account = byEmail.get();
+            //return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
+            return new AccountAdapter(account);
+        }
+    }
 
-	private Collection<? extends GrantedAuthority> authorities(Set<AccountRole> roles)
-	{
-		return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r.name())).collect(Collectors.toSet());
-	}
+    private Collection<? extends GrantedAuthority> authorities(Set<AccountRole> roles) {
+        return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r.name())).collect(Collectors.toSet());
+    }
 }

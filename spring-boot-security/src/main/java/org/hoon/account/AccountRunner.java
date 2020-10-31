@@ -6,14 +6,12 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountRunner implements ApplicationRunner
-{
-	@Autowired
-	AccountService accountService;
+public class AccountRunner implements ApplicationRunner {
+    @Autowired
+    AccountService accountService;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
-		Account account = accountService.createAccount("1hoon", "1234");
-	}
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        Account account = accountService.createAccount("1hoon", "1234");
+    }
 }

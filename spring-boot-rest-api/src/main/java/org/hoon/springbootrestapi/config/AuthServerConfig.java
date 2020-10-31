@@ -15,42 +15,41 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthServerConfig extends AuthorizationServerConfigurerAdapter
-{
-	@Autowired
-	PasswordEncoder passwordEncoder;
+public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-	@Autowired
-	AuthenticationManager authenticationManager;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
-	@Autowired
-	AccountService accountService;
+    @Autowired
+    AccountService accountService;
 
-	@Autowired
-	TokenStore tokenStore;
+    @Autowired
+    TokenStore tokenStore;
 
-	@Autowired
-	AppProperties appProperties;
+    @Autowired
+    AppProperties appProperties;
 
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.passwordEncoder(this.passwordEncoder);
-	}
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.passwordEncoder(this.passwordEncoder);
+    }
 
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient(this.appProperties.getClientId())
-				.authorizedGrantTypes("password", "refresh_token")
-				.scopes("read", "write")
-				.secret(this.passwordEncoder.encode(this.appProperties.getClientSecret()))
-				.accessTokenValiditySeconds(10 * 60)
-				.refreshTokenValiditySeconds(6 * 10 * 60);
-	}
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.inMemory().withClient(this.appProperties.getClientId())
+                .authorizedGrantTypes("password", "refresh_token")
+                .scopes("read", "write")
+                .secret(this.passwordEncoder.encode(this.appProperties.getClientSecret()))
+                .accessTokenValiditySeconds(10 * 60)
+                .refreshTokenValiditySeconds(6 * 10 * 60);
+    }
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(this.authenticationManager)
-				.userDetailsService(this.accountService)
-				.tokenStore(this.tokenStore);
-	}
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.authenticationManager(this.authenticationManager)
+                .userDetailsService(this.accountService)
+                .tokenStore(this.tokenStore);
+    }
 }

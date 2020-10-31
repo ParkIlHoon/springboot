@@ -1,5 +1,4 @@
 package org.hoon.exception;
 
-public class SampleException extends RuntimeException
-{
+public class SampleException extends RuntimeException {
 }

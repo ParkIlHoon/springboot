@@ -16,58 +16,54 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-public class UserControllerTest
-{
-	@Autowired
-	MockMvc mockMvc;
+public class UserControllerTest {
+    @Autowired
+    MockMvc mockMvc;
 
-	@Test
-	public void hello ()
-	{
-		try {
-			mockMvc.perform(get("/hello"))
-					.andExpect(status().isOk())
-					.andExpect(content().string(("hello")));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void createUser_JSON ()
-	{
-		String userJson = "{\"username\" : \"1hoon\", \"password\" : \"123\"}";
+    @Test
+    public void hello() {
+        try {
+            mockMvc.perform(get("/hello"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(("hello")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		try {
-			mockMvc.perform(post("/users/create")
-					.contentType(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.content(userJson))
-					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.username", is(equalTo("1hoon"))))
-					.andExpect(jsonPath("$.password", is(equalTo("123"))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void createUser_JSON() {
+        String userJson = "{\"username\" : \"1hoon\", \"password\" : \"123\"}";
 
-	@Test
-	public void createUser_XML ()
-	{
-		String userJson = "{\"username\" : \"1hoon\", \"password\" : \"123\"}";
+        try {
+            mockMvc.perform(post("/users/create")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(userJson))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.username", is(equalTo("1hoon"))))
+                    .andExpect(jsonPath("$.password", is(equalTo("123"))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		try {
-			mockMvc.perform(post("/users/create")
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_ATOM_XML)
-						.content(userJson))
-					.andExpect(status().isOk())
-					.andExpect(xpath("/User/username").string("1hoon"))
-					.andExpect(xpath("/User/password").string("123"));
+    @Test
+    public void createUser_XML() {
+        String userJson = "{\"username\" : \"1hoon\", \"password\" : \"123\"}";
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            mockMvc.perform(post("/users/create")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_ATOM_XML)
+                    .content(userJson))
+                    .andExpect(status().isOk())
+                    .andExpect(xpath("/User/username").string("1hoon"))
+                    .andExpect(xpath("/User/password").string("123"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

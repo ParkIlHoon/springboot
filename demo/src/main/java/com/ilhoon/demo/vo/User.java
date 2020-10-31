@@ -8,8 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class User
-{
+public class User {
     @Id
     @Column
     private String userId;

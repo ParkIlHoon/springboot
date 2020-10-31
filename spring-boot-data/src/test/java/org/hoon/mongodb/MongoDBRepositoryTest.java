@@ -12,26 +12,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest
-public class MongoDBRepositoryTest
-{
-	@Autowired
-	MongoDBRepository repository;
+public class MongoDBRepositoryTest {
+    @Autowired
+    MongoDBRepository repository;
 
-	@Test
-	public void findByEmail ()
-	{
-		Account account = new Account();
-		account.setName("일훈");
-		account.setEmail("chiwoo2074@gmail.com");
+    @Test
+    public void findByEmail() {
+        Account account = new Account();
+        account.setName("일훈");
+        account.setEmail("chiwoo2074@gmail.com");
 
-		repository.save(account);
+        repository.save(account);
 
-		Optional<Account> byId = repository.findById(account.getId());
-		assertThat(byId).isNotNull();
+        Optional<Account> byId = repository.findById(account.getId());
+        assertThat(byId).isNotNull();
 
-		Optional<Account> byEmail = repository.findByEmail(account.getEmail());
-		assertThat(byEmail).isNotNull();
+        Optional<Account> byEmail = repository.findByEmail(account.getEmail());
+        assertThat(byEmail).isNotNull();
 
-		assertThat(byId).isEqualTo(byEmail);
-	}
+        assertThat(byId).isEqualTo(byEmail);
+    }
 }

@@ -17,35 +17,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class AccountRepositoryTest
-{
-	@Autowired
-	DataSource dataSource;
+public class AccountRepositoryTest {
+    @Autowired
+    DataSource dataSource;
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
-	@Test
-	public void di ()
-	{
-		Account account = new Account();
-		account.setUsername("테스트 사용자");
-		account.setPassword("123");
+    @Test
+    public void di() {
+        Account account = new Account();
+        account.setUsername("테스트 사용자");
+        account.setPassword("123");
 
-		Account newAccount = accountRepository.save(account);
+        Account newAccount = accountRepository.save(account);
 
-		assertThat(newAccount).isNotNull();
+        assertThat(newAccount).isNotNull();
 
-		Account findAccount = accountRepository.findByUsername(newAccount.getUsername());
+        Account findAccount = accountRepository.findByUsername(newAccount.getUsername());
 
-		assertThat(findAccount).isEqualTo(newAccount);
+        assertThat(findAccount).isEqualTo(newAccount);
 
 //		Optional<Account> optionalAccount = accountRepository.findByUsernameOptional("test");
 //
 //		assertThat(optionalAccount).isNotNull();
-	}
+    }
 
 }

@@ -5,21 +5,23 @@
     <title>타이틀</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        function BTN_REST_click ()
-        {
+        function BTN_REST_click() {
             $.ajax({
                 type: "GET",
                 url: "/rest/testvalue",
-                success: (data) => { console.log(data); $('#contents').html(data); }
+                success: (data) => {
+                    console.log(data);
+                    $('#contents').html(data);
+                }
             });
         }
     </script>
 </head>
 <body>
-    스프링 부트 반가웡!
+스프링 부트 반가웡!
 
-    <button onclick="BTN_REST_click()">REST 테스트</button>
+<button onclick="BTN_REST_click()">REST 테스트</button>
 
-    <textarea id="contents"></textarea>
+<textarea id="contents"></textarea>
 </body>
 </html>

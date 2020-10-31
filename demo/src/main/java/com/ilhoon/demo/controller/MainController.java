@@ -10,20 +10,17 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-public class MainController
-{
+public class MainController {
     @Autowired
     UserService userService;
 
     @RequestMapping("/")
-    public String main ()
-    {
+    public String main() {
         return "index.html";
     }
 
     @RequestMapping("/jsp")
-    public ModelAndView jsp ()
-    {
+    public ModelAndView jsp() {
         ModelAndView model = new ModelAndView("main");
 
         User user = userService.findByUserId("1hoon");

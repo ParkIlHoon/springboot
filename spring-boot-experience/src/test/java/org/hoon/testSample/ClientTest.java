@@ -9,16 +9,14 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ClientTest
-{
-	@Autowired
-	WebTestClient webTestClient;
+public class ClientTest {
+    @Autowired
+    WebTestClient webTestClient;
 
-	@Test
-	public void hello ()
-	{
-		webTestClient.get().uri("/hello").exchange()
-				.expectStatus().isOk()
-				.expectBody(String.class).isEqualTo("hello박일훈");
-	}
+    @Test
+    public void hello() {
+        webTestClient.get().uri("/hello").exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class).isEqualTo("hello박일훈");
+    }
 }

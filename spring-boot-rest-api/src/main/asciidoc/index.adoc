@@ -63,7 +63,8 @@
 [[overview-errors]]
 == 오류
 
-에러 응답이 발생했을 때 (상태 코드 >= 400), 본문에 해당 문제를 기술한 JSON 객체가 담겨있다. 에러 객체는 다음의 구조를 따른다.
+에러 응답이 발생했을 때 (상태 코드 >= 400), 본문에 해당 문제를 기술한 JSON 객체가 담겨있다.
+에러 객체는 다음의 구조를 따른다.
 
 include::{snippets}/errors/response-fields.adoc[]
 
@@ -85,7 +86,6 @@ include::{snippets}/errors/http-response.adoc[]
 == 인덱스
 
 인덱스는 서비스 진입점을 제공한다.
-
 
 [[resources-index-access]]
 === 인덱스 조회

@@ -14,18 +14,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SampleController.class)
-public class ThymeleafTest
-{
-	@Autowired
-	MockMvc mockMvc;
+public class ThymeleafTest {
+    @Autowired
+    MockMvc mockMvc;
 
-	@Test
-	public void sample () throws Exception
-	{
-		mockMvc.perform(get("/sample"))
-				.andExpect(status().isOk())
-				.andDo(print())
-				.andExpect(view().name("sample"))
-				.andExpect(model().attribute("name", is("1hoon")));
-	}
+    @Test
+    public void sample() throws Exception {
+        mockMvc.perform(get("/sample"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(view().name("sample"))
+                .andExpect(model().attribute("name", is("1hoon")));
+    }
 }

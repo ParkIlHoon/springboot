@@ -14,17 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(HateoasController.class)
-public class HateoasTest
-{
-	@Autowired
-	MockMvc mockMvc;
+public class HateoasTest {
+    @Autowired
+    MockMvc mockMvc;
 
-	@Test
-	public void test () throws Exception
-	{
-		mockMvc.perform(get("/hateoas"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$._links.self").exists())
-				.andDo(print());
-	}
+    @Test
+    public void test() throws Exception {
+        mockMvc.perform(get("/hateoas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._links.self").exists())
+                .andDo(print());
+    }
 }

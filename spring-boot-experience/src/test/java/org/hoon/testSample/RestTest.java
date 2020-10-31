@@ -13,21 +13,19 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RestTest
-{
-	@Autowired
-	TestRestTemplate testRestTemplate;
+public class RestTest {
+    @Autowired
+    TestRestTemplate testRestTemplate;
 
-	@MockBean
-	SampleService mockSampleService;
-	
-	@Test
-	public void hello ()
-	{
-		when(mockSampleService.getName()).thenReturn("hello");
-		
-		String result = testRestTemplate.getForObject("/hello", String.class);
+    @MockBean
+    SampleService mockSampleService;
 
-		assertThat(result).isEqualTo("hellohello");
-	}
+    @Test
+    public void hello() {
+        when(mockSampleService.getName()).thenReturn("hello");
+
+        String result = testRestTemplate.getForObject("/hello", String.class);
+
+        assertThat(result).isEqualTo("hellohello");
+    }
 }

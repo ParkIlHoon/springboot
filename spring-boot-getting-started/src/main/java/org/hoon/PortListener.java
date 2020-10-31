@@ -9,18 +9,17 @@ import org.springframework.stereotype.Component;
  * ServletWebServer가 초기화 됬을 때 이벤트 리스너 클래스
  */
 @Component
-public class PortListener implements ApplicationListener<ServletWebServerInitializedEvent>
-{
-	/**
-	 * 어플리케이션 ServletWebServer가 초기화 됬을 때 호출되는 메서드
-	 * PORT를 콘솔에 찍는다.
-	 * @param servletWebServerInitializedEvent
-	 */
-	@Override
-	public void onApplicationEvent(ServletWebServerInitializedEvent servletWebServerInitializedEvent)
-	{
-		ServletWebServerApplicationContext context = servletWebServerInitializedEvent.getApplicationContext();
+public class PortListener implements ApplicationListener<ServletWebServerInitializedEvent> {
+    /**
+     * 어플리케이션 ServletWebServer가 초기화 됬을 때 호출되는 메서드
+     * PORT를 콘솔에 찍는다.
+     *
+     * @param servletWebServerInitializedEvent
+     */
+    @Override
+    public void onApplicationEvent(ServletWebServerInitializedEvent servletWebServerInitializedEvent) {
+        ServletWebServerApplicationContext context = servletWebServerInitializedEvent.getApplicationContext();
 
-		System.out.println(context.getWebServer().getPort());
-	}
+        System.out.println(context.getWebServer().getPort());
+    }
 }

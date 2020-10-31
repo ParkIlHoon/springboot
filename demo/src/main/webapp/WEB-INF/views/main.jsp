@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,9 +7,9 @@
     <title>Insert title here</title>
 </head>
 <body>
-    JSP 페이지입니다. <br>
-    <%= request.getAttribute("testvalue")%> <br>
+JSP 페이지입니다. <br>
+<%= request.getAttribute("testvalue")%> <br>
 
-    <%= request.getAttribute("user")%>
+<%= request.getAttribute("user")%>
 </body>
 </html>

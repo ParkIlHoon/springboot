@@ -11,20 +11,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-public class HateoasController
-{
+public class HateoasController {
 
-	@GetMapping("/hateoas")
-	public EntityModel test ()
-	{
-		Hello returnValue = new Hello();
-		returnValue.setName("테스트");
-		returnValue.setPrefix("key");
+    @GetMapping("/hateoas")
+    public EntityModel test() {
+        Hello returnValue = new Hello();
+        returnValue.setName("테스트");
+        returnValue.setPrefix("key");
 
-		EntityModel<Hello> helloResource = new EntityModel<>(returnValue);
+        EntityModel<Hello> helloResource = new EntityModel<>(returnValue);
 
-		helloResource.add(linkTo(methodOn(HateoasController.class).test()).withSelfRel());
+        helloResource.add(linkTo(methodOn(HateoasController.class).test()).withSelfRel());
 
-		return helloResource;
-	}
+        return helloResource;
+    }
 }

@@ -10,24 +10,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @SpringBootApplication
-public class Application
-{
-	@Autowired
-	MongoTemplate template;
+public class Application {
+    @Autowired
+    MongoTemplate template;
 
-	@Autowired
-	MongoDBRepository repository;
+    @Autowired
+    MongoDBRepository repository;
 
-	public static void main(String[] args)
-	{
-		SpringApplication application = new SpringApplication(Application.class);
-		application.run(args);
-	}
+    public static void main(String[] args) {
+        SpringApplication application = new SpringApplication(Application.class);
+        application.run(args);
+    }
 
-	@Bean
-	public ApplicationRunner applicationRunner ()
-	{
-		return args -> {
+    @Bean
+    public ApplicationRunner applicationRunner() {
+        return args -> {
 //			Account account = new Account();
 //			account.setName("일훈");
 //			account.setEmail("chiwoo2074@gmail.com");
@@ -39,6 +36,6 @@ public class Application
 //			account.setEmail("chiwoo2074@gmail.com");
 //
 //			repository.save(account);
-		};
-	}
+        };
+    }
 }

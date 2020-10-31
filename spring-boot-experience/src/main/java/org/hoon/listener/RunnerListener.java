@@ -10,26 +10,24 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RunnerListener implements ApplicationRunner
-{
-	private Logger logger = LoggerFactory.getLogger(RunnerListener.class);
+public class RunnerListener implements ApplicationRunner {
+    private Logger logger = LoggerFactory.getLogger(RunnerListener.class);
 
-	@Value("${ilhoon.test}")
-	private String test;
+    @Value("${ilhoon.test}")
+    private String test;
 
-	@Autowired
-	IhoonProp prop;
+    @Autowired
+    IhoonProp prop;
 
 //	@Autowired
 //	private String hello;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
-		logger.debug("[RunnerListener] ilhoonProp.name : " + prop.getName());
-		logger.debug("[RunnerListener] ilhoonProp.sessionTimeout : " + prop.getSessionTimeout());
-		logger.debug("[RunnerListener] foo : " + args.containsOption("foo"));
-		logger.debug("[RunnerListener] bar : " + args.containsOption("bar"));
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        logger.debug("[RunnerListener] ilhoonProp.name : " + prop.getName());
+        logger.debug("[RunnerListener] ilhoonProp.sessionTimeout : " + prop.getSessionTimeout());
+        logger.debug("[RunnerListener] foo : " + args.containsOption("foo"));
+        logger.debug("[RunnerListener] bar : " + args.containsOption("bar"));
 //		logger.debug("[RunnerListener] hello : " + hello);
-	}
+    }
 }

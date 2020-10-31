@@ -145,7 +145,8 @@
                         <id>generate-docs</id>
                         <phase>prepare-package</phase>
                         <goals>
-                            <goal>process-asciidoc</goal> </goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
                         <configuration>
                             <backend>html</backend>
                             <doctype>book</doctype>
@@ -172,7 +173,8 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.outputDirectory}/static/docs </outputDirectory>
+                                ${project.build.outputDirectory}/static/docs
+                            </outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>

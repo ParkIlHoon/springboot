@@ -9,46 +9,45 @@ import java.time.temporal.ChronoUnit;
 
 @Component
 @ConfigurationProperties("ilhoon-prop")
-public class IhoonProp
-{
-	private String name;
+public class IhoonProp {
+    private String name;
 
-	private int age;
+    private int age;
 
-	private String fullName;
+    private String fullName;
 
-	@DurationUnit(ChronoUnit.SECONDS)
-	private Duration sessionTimeout = Duration.ofSeconds(30);
+    @DurationUnit(ChronoUnit.SECONDS)
+    private Duration sessionTimeout = Duration.ofSeconds(30);
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public String getFullName() {
-		return fullName;
-	}
+    public String getFullName() {
+        return fullName;
+    }
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-	public Duration getSessionTimeout() {
-		return sessionTimeout;
-	}
+    public Duration getSessionTimeout() {
+        return sessionTimeout;
+    }
 
-	public void setSessionTimeout(Duration sessionTimeout) {
-		this.sessionTimeout = sessionTimeout;
-	}
+    public void setSessionTimeout(Duration sessionTimeout) {
+        this.sessionTimeout = sessionTimeout;
+    }
 }

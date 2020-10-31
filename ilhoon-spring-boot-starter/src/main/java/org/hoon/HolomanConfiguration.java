@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(HolomanProperties.class)
-public class HolomanConfiguration
-{
+public class HolomanConfiguration {
 	/*
 	@Bean
 	@ConditionalOnMissingBean // Holoman 타입의 Bean이 없을 때만 Bean 등록
@@ -28,19 +27,19 @@ public class HolomanConfiguration
 	}
 	 */
 
-	/**
-	 * Properties를 이용해 Bean 생성
-	 * @param properties
-	 * @return
-	 */
-	@Bean
-	@ConditionalOnMissingBean
-	public Holoman holoman (HolomanProperties properties)
-	{
-		Holoman holoman = new Holoman();
-		holoman.setHowLong(properties.getHowLong());
-		holoman.setName(properties.getName());
+    /**
+     * Properties를 이용해 Bean 생성
+     *
+     * @param properties
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public Holoman holoman(HolomanProperties properties) {
+        Holoman holoman = new Holoman();
+        holoman.setHowLong(properties.getHowLong());
+        holoman.setName(properties.getName());
 
-		return holoman;
-	}
+        return holoman;
+    }
 }

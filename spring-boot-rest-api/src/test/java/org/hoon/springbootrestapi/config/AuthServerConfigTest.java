@@ -19,47 +19,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuthServerConfigTest extends BaseControllerTest
-{
-	@Autowired
-	AccountService accountService;
+public class AuthServerConfigTest extends BaseControllerTest {
+    @Autowired
+    AccountService accountService;
 
-	@Autowired
-	AppProperties appProperties;
+    @Autowired
+    AppProperties appProperties;
 
-	@Autowired
-	AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
-	@Before
-	public void setUp()
-	{
-		this.accountRepository.deleteAll();
-	}
+    @Before
+    public void setUp() {
+        this.accountRepository.deleteAll();
+    }
 
-	@Test
-	@TestDescription("인증 토큰을 발급 받는 테스트")
-	public void getAuthToken() throws Exception
-	{
-		// 테스트 계정 생성
-		String username = this.appProperties.getUserUserName();
-		String password = this.appProperties.getUserPassword();
-		Account account = Account.builder()
-									.email(username)
-									.password(password)
-									.roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-								.build();
-		this.accountService.saveAccount(account);
+    @Test
+    @TestDescription("인증 토큰을 발급 받는 테스트")
+    public void getAuthToken() throws Exception {
+        // 테스트 계정 생성
+        String username = this.appProperties.getUserUserName();
+        String password = this.appProperties.getUserPassword();
+        Account account = Account.builder()
+                .email(username)
+                .password(password)
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
+        this.accountService.saveAccount(account);
 
-		String clientId = this.appProperties.getClientId();
-		String clientSecret = this.appProperties.getClientSecret();
+        String clientId = this.appProperties.getClientId();
+        String clientSecret = this.appProperties.getClientSecret();
 
-		this.mockMvc.perform(post("/oauth/token")
-								.with(httpBasic(clientId, clientSecret))
-								.param("username", username)
-								.param("password", password)
-								.param("grant_type", "password"))
-					.andDo(print())
-					.andExpect(status().isOk())
-					.andExpect(jsonPath("access_token").exists());
-	}
+        this.mockMvc.perform(post("/oauth/token")
+                .with(httpBasic(clientId, clientSecret))
+                .param("username", username)
+                .param("password", password)
+                .param("grant_type", "password"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("access_token").exists());
+    }
 }

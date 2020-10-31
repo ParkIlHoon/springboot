@@ -7,14 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-public class Application
-{
-	public static void main(String[] args)
-	{
-		SpringApplication application = new SpringApplication(Application.class);
-		// Application Context 구성 전 이벤트 리스너 추가
-		application.addListeners(new SampleListener());
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication application = new SpringApplication(Application.class);
+        // Application Context 구성 전 이벤트 리스너 추가
+        application.addListeners(new SampleListener());
 
-		application.run(args);
-	}
+        application.run(args);
+    }
 }

@@ -11,15 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ApplicationTest
-{
-	@Autowired
-	Environment environment;
+public class ApplicationTest {
+    @Autowired
+    Environment environment;
 
-	@Test
-	public void contextLoads ()
-	{
-		assertThat(environment.getProperty("ilhoon.test"))
-				.isEqualTo("test");
-	}
+    @Test
+    public void contextLoads() {
+        assertThat(environment.getProperty("ilhoon.test"))
+                .isEqualTo("test");
+    }
 }

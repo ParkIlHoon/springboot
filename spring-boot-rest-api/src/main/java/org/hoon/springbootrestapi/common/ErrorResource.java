@@ -9,10 +9,8 @@ import org.springframework.validation.Errors;
 import static org.springframework.hateoas.server.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public class ErrorResource extends RepresentationModel
-{
-	public ErrorResource(Errors content, Link... links)
-	{
-		this.add(linkTo(methodOn(IndexController.class).index()).withRel("index"));
-	}
+public class ErrorResource extends RepresentationModel {
+    public ErrorResource(Errors content, Link... links) {
+        this.add(linkTo(methodOn(IndexController.class).index()).withRel("index"));
+    }
 }

@@ -16,21 +16,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class SampleTest
-{
-	@Autowired
-	MockMvc mockMvc;
+public class SampleTest {
+    @Autowired
+    MockMvc mockMvc;
 
-	@Test
-	public void hello ()
-	{
-		try {
-			mockMvc.perform(get("/hello"))
-					.andExpect(status().isOk())
-					.andExpect(content().string("hello박일훈"))
-					.andDo(print());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void hello() {
+        try {
+            mockMvc.perform(get("/hello"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string("hello박일훈"))
+                    .andDo(print());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

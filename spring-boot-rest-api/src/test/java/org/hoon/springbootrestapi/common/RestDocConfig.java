@@ -8,13 +8,11 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentationConfigurer;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 @TestConfiguration
-public class RestDocConfig
-{
-	@Bean
-	public RestDocsMockMvcConfigurationCustomizer restDocsMockMvcConfigurationCustomizer()
-	{
-		return configurer -> configurer.operationPreprocessors()
-				.withResponseDefaults(prettyPrint())
-				.withRequestDefaults(prettyPrint());
-	}
+public class RestDocConfig {
+    @Bean
+    public RestDocsMockMvcConfigurationCustomizer restDocsMockMvcConfigurationCustomizer() {
+        return configurer -> configurer.operationPreprocessors()
+                .withResponseDefaults(prettyPrint())
+                .withRequestDefaults(prettyPrint());
+    }
 }

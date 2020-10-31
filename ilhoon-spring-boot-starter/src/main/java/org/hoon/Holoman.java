@@ -3,33 +3,32 @@ package org.hoon;
 /**
  * Bean으로 생성될 객체
  */
-public class Holoman
-{
-	String name;
+public class Holoman {
+    String name;
 
-	int howLong;
+    int howLong;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getHowLong() {
-		return howLong;
-	}
+    public int getHowLong() {
+        return howLong;
+    }
 
-	public void setHowLong(int howLong) {
-		this.howLong = howLong;
-	}
+    public void setHowLong(int howLong) {
+        this.howLong = howLong;
+    }
 
-	@Override
-	public String toString() {
-		return "Holoman{" +
-				"name='" + name + '\'' +
-				", howLong=" + howLong +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "Holoman{" +
+                "name='" + name + '\'' +
+                ", howLong=" + howLong +
+                '}';
+    }
 }

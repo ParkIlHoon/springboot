@@ -9,30 +9,28 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Neo4JRunner implements ApplicationRunner
-{
-	@Autowired
-	SessionFactory sessionFactory;
+public class Neo4JRunner implements ApplicationRunner {
+    @Autowired
+    SessionFactory sessionFactory;
 
-	@Autowired
-	Neo4JRepository repository;
+    @Autowired
+    Neo4JRepository repository;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception
-	{
-		Account account = new Account();
-		account.setName("일훈3");
-		account.setEmail("chiwoo2074@gmail.com");
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        Account account = new Account();
+        account.setName("일훈3");
+        account.setEmail("chiwoo2074@gmail.com");
 
-		Role role = new Role();
-		role.setName("USER");
+        Role role = new Role();
+        role.setName("USER");
 
-		account.getRole().add(role);
+        account.getRole().add(role);
 
 //		Session session = sessionFactory.openSession();
 //		session.save(account);
 //		sessionFactory.close();
 
-		repository.save(account);
-	}
+        repository.save(account);
+    }
 }

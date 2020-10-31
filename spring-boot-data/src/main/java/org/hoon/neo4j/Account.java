@@ -9,48 +9,47 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Account
-{
-	@Id
-	@GeneratedValue
-	private Long id;
+public class Account {
+    @Id
+    @GeneratedValue
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private String email;
+    private String email;
 
-	@Relationship(type = "has")
-	private Set<Role> role = new HashSet<Role>();
+    @Relationship(type = "has")
+    private Set<Role> role = new HashSet<Role>();
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public Set<Role> getRole() {
-		return role;
-	}
+    public Set<Role> getRole() {
+        return role;
+    }
 
-	public void setRole(Set<Role> role) {
-		this.role = role;
-	}
+    public void setRole(Set<Role> role) {
+        this.role = role;
+    }
 }

@@ -13,18 +13,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-public class UserController
-{
+public class UserController {
     @Autowired
     UserService userService;
 
     /**
      * 전체 사용자 조회
+     *
      * @return 전체 사용자 리스트
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<User>> getAllUsers ()
-    {
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userService.findAll();
 
         return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
@@ -32,12 +31,12 @@ public class UserController
 
     /**
      * 사용자 조회
+     *
      * @param userNm 조회 대상 사용자 이름
      * @return 사용자 목록
      */
     @GetMapping(params = "method=name", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<User>> getUserListByNm (@RequestParam(value = "userNm") String userNm)
-    {
+    public ResponseEntity<List<User>> getUserListByNm(@RequestParam(value = "userNm") String userNm) {
         List<User> userList = userService.findByUserNmLike(userNm);
 
         return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
@@ -45,12 +44,12 @@ public class UserController
 
     /**
      * 특정 사용자 조회
+     *
      * @param userId 조회 대상 사용자 아이디
      * @return 특정 사용자 정보
      */
-    @GetMapping(value="/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> getUser (@PathVariable("userId") String userId)
-    {
+    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<User> getUser(@PathVariable("userId") String userId) {
         User user = userService.findByUserId(userId);
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
@@ -58,13 +57,13 @@ public class UserController
 
     /**
      * 사용자 정보 수정
+     *
      * @param userId 대상자 아이디
      * @param userVO 수정 값
      * @return 수정 완료된 사용자 정보
      */
-    @PutMapping(value="/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<User> updateUser (@PathVariable("userId") String userId, User userVO)
-    {
+    @PutMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<User> updateUser(@PathVariable("userId") String userId, User userVO) {
         User user = userService.save(userVO);
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
@@ -72,12 +71,12 @@ public class UserController
 
     /**
      * 사용자 추가
+     *
      * @param userVO
      * @return
      */
     @PostMapping
-    public ResponseEntity<User> insertUser (User userVO)
-    {
+    public ResponseEntity<User> insertUser(User userVO) {
         User user = userService.save(userVO);
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
@@ -85,11 +84,11 @@ public class UserController
 
     /**
      * 사용자 삭제
+     *
      * @param userId
      */
-    @DeleteMapping(value="/{userId}")
-    public void deleteUser (@PathVariable("userId") String userId)
-    {
+    @DeleteMapping(value = "/{userId}")
+    public void deleteUser(@PathVariable("userId") String userId) {
         userService.deleteByUserId(userId);
     }
 }

@@ -6,11 +6,9 @@ import org.springframework.context.annotation.Profile;
 
 @Profile("prod")
 @Configuration
-public class BaseConfiguration
-{
-	@Bean
-	public String hello ()
-	{
-		return "Hello";
-	}
+public class BaseConfiguration {
+    @Bean
+    public String hello() {
+        return "Hello";
+    }
 }

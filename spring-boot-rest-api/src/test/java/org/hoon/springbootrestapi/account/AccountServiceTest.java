@@ -21,50 +21,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class AccountServiceTest
-{
-	@Autowired
-	AccountService accountService;
+public class AccountServiceTest {
+    @Autowired
+    AccountService accountService;
 
-	@Autowired
-	AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
-	@Test
-	public void findByUsername()
-	{
-		String userName = "testUser";
-		String password = "1234";
+    @Test
+    public void findByUsername() {
+        String userName = "testUser";
+        String password = "1234";
 
-		Account account = Account.builder()
-									.email(userName)
-									.password(password)
-									.roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-								.build();
+        Account account = Account.builder()
+                .email(userName)
+                .password(password)
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
 
-		//accountRepository.save(account);
-		this.accountService.saveAccount(account);
+        //accountRepository.save(account);
+        this.accountService.saveAccount(account);
 
-		UserDetailsService userDetailsService = (UserDetailsService) this.accountService;
-		UserDetails userDetails = this.accountService.loadUserByUsername(userName);
+        UserDetailsService userDetailsService = (UserDetailsService) this.accountService;
+        UserDetails userDetails = this.accountService.loadUserByUsername(userName);
 
-		assertThat(this.passwordEncoder.matches(password, userDetails.getPassword()));
-	}
+        assertThat(this.passwordEncoder.matches(password, userDetails.getPassword()));
+    }
 
-	@Test
-	public void fingByUsername_fail()
-	{
-		String userName = "testUser1234";
+    @Test
+    public void fingByUsername_fail() {
+        String userName = "testUser1234";
 
-		expectedException.expect(UsernameNotFoundException.class);
-		expectedException.expectMessage(Matchers.containsString(userName));
+        expectedException.expect(UsernameNotFoundException.class);
+        expectedException.expectMessage(Matchers.containsString(userName));
 
-		UserDetailsService userDetailsService = (UserDetailsService) accountService;
-		UserDetails userDetails = accountService.loadUserByUsername(userName);
-	}
+        UserDetailsService userDetailsService = (UserDetailsService) accountService;
+        UserDetails userDetails = accountService.loadUserByUsername(userName);
+    }
 }

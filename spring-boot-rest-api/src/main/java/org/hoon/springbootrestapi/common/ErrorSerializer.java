@@ -9,54 +9,45 @@ import org.springframework.validation.Errors;
 import java.io.IOException;
 
 @JsonComponent
-public class ErrorSerializer extends JsonSerializer<Errors>
-{
-	@Override
-	public void serialize(Errors errors, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException
-	{
-		jsonGenerator.writeStartArray();
+public class ErrorSerializer extends JsonSerializer<Errors> {
+    @Override
+    public void serialize(Errors errors, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeStartArray();
 
-		errors.getFieldErrors().stream().forEach(e -> {
-			try
-			{
-				jsonGenerator.writeStartObject();
+        errors.getFieldErrors().stream().forEach(e -> {
+            try {
+                jsonGenerator.writeStartObject();
 
-				jsonGenerator.writeStringField("field", e.getField());
-				jsonGenerator.writeStringField("objectName", e.getObjectName());
-				jsonGenerator.writeStringField("defaultMessage", e.getDefaultMessage());
-				jsonGenerator.writeStringField("code", e.getCode());
+                jsonGenerator.writeStringField("field", e.getField());
+                jsonGenerator.writeStringField("objectName", e.getObjectName());
+                jsonGenerator.writeStringField("defaultMessage", e.getDefaultMessage());
+                jsonGenerator.writeStringField("code", e.getCode());
 
-				Object rejectedValue = e.getRejectedValue();
-				if (rejectedValue != null)
-				{
-					jsonGenerator.writeStringField("rejectedValue", rejectedValue.toString());
-				}
+                Object rejectedValue = e.getRejectedValue();
+                if (rejectedValue != null) {
+                    jsonGenerator.writeStringField("rejectedValue", rejectedValue.toString());
+                }
 
-				jsonGenerator.writeEndObject();
-			}
-			catch (Exception e1)
-			{
-				e1.printStackTrace();
-			}
-		});
+                jsonGenerator.writeEndObject();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
-		errors.getGlobalErrors().forEach(e -> {
-			try
-			{
-				jsonGenerator.writeStartObject();
+        errors.getGlobalErrors().forEach(e -> {
+            try {
+                jsonGenerator.writeStartObject();
 
-				jsonGenerator.writeStringField("objectName", e.getObjectName());
-				jsonGenerator.writeStringField("defaultMessage", e.getDefaultMessage());
-				jsonGenerator.writeStringField("code", e.getCode());
+                jsonGenerator.writeStringField("objectName", e.getObjectName());
+                jsonGenerator.writeStringField("defaultMessage", e.getDefaultMessage());
+                jsonGenerator.writeStringField("code", e.getCode());
 
-				jsonGenerator.writeEndObject();
-			}
-			catch (Exception e1)
-			{
-				e1.printStackTrace();
-			}
-		});
+                jsonGenerator.writeEndObject();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
-		jsonGenerator.writeEndArray();
-	}
+        jsonGenerator.writeEndArray();
+    }
 }
